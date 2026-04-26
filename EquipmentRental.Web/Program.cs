@@ -6,7 +6,8 @@ using EquipmentRental.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-
+//admin@local
+//P@ssw0rd1
 
 var builder = WebApplication.CreateBuilder(args);
 

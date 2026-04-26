@@ -1,0 +1,85 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model EquipmentRental.Web.Areas.Identity.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<section class="content-section d-flex justify-content-center align-items-start py-5">
+    <div class="form-section" style="width:100%; max-width:520px;">
+
+        <div class="text-center mb-4">
+            <i class="bi bi-person-plus-fill" style="font-size:2.5rem; color:#667eea;"></i>
+            <h1 class="mt-2 mb-0" style="font-size:1.7rem;">Създай акаунт</h1>
+            <p class="text-muted small">Попълни данните си за регистрация</p>
+        </div>
+
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2" role="alert"></div>
+
+            <div class="form-row mb-3">
+                <div class="form-group col-md-6">
+                    <label asp-for="Input.FirstName" class="form-label fw-semibold"></label>
+                    <input asp-for="Input.FirstName" class="form-control" placeholder="Иван" autocomplete="given-name" />
+                    <span asp-validation-for="Input.FirstName" class="text-danger small"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Input.LastName" class="form-label fw-semibold"></label>
+                    <input asp-for="Input.LastName" class="form-control" placeholder="Иванов" autocomplete="family-name" />
+                    <span asp-validation-for="Input.LastName" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Input.UserName" class="form-label fw-semibold"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input asp-for="Input.UserName" class="form-control" placeholder="ivan123" autocomplete="username" />
+                </div>
+                <span asp-validation-for="Input.UserName" class="text-danger small"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Input.Email" class="form-label fw-semibold"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input asp-for="Input.Email" class="form-control" placeholder="ivan@example.com" autocomplete="email" />
+                </div>
+                <span asp-validation-for="Input.Email" class="text-danger small"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Input.Password" class="form-label fw-semibold"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input asp-for="Input.Password" class="form-control" placeholder="••••••" autocomplete="new-password" />
+                </div>
+                <span asp-validation-for="Input.Password" class="text-danger small"></span>
+            </div>
+
+            <div class="form-group mb-4">
+                <label asp-for="Input.ConfirmPassword" class="form-label fw-semibold"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                    <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="••••••" autocomplete="new-password" />
+                </div>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+                <i class="bi bi-check-circle me-1"></i> Регистрация
+            </button>
+        </form>
+
+        <hr class="my-3">
+        <p class="text-center text-muted small mb-0">
+            Вече имате акаунт?
+            <a asp-area="Identity" asp-page="/Account/Login" class="fw-semibold">Влезте тук</a>
+        </p>
+
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

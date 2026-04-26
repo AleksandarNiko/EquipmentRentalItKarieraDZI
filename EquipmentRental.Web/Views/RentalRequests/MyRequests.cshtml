@@ -1,0 +1,82 @@
+@model IEnumerable<EquipmentRental.Data.Models.RentalRequest>
+@using EquipmentRental.Data.Models
+@{
+    ViewData["Title"] = "Моите заявки";
+}
+
+<section class="content-section">
+    <section class="page-header">
+        <h1><i class="bi bi-journal-text"></i> Моите заявки</h1>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Нова заявка
+        </a>
+    </section>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted mt-3">Нямате подадени заявки.</p>
+    }
+    else
+    {
+        <table class="table table-striped table-hover mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Начална дата</th>
+                    <th>Крайна дата</th>
+                    <th>Артикули</th>
+                    <th>Коментар</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var req in Model)
+                {
+                    <tr>
+                        <td>@req.Id</td>
+                        <td>@req.StartDate.ToString("dd.MM.yyyy")</td>
+                        <td>@req.EndDate.ToString("dd.MM.yyyy")</td>
+                        <td>
+                            <ul class="item-list">
+                                @foreach (var ri in req.RentalRequestItems)
+                                {
+                                    <li>@ri.EquipmentItem?.Name — @ri.Quantity бр.</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>@req.Comment</td>
+                        <td>
+                            <span class="status-badge status-@req.Status.ToLower()">
+                                @(req.Status == RentalStatus.Pending  ? "В изчакване" :
+                                  req.Status == RentalStatus.Approved ? "Одобрена"    : "Отказана")
+                            </span>
+                        </td>
+                        <td>
+                            @if (req.Status == RentalStatus.Pending)
+                            {
+                                <form asp-action="Delete" method="post" class="d-inline"
+                                      onsubmit="return confirm('Сигурни ли сте, че искате да изтриете тази заявка?')">
+                                    <input type="hidden" name="id" value="@req.Id" />
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i> Изтрий
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</section>

@@ -1,0 +1,54 @@
+@model IEnumerable<EquipmentRental.Data.Models.EquipmentItem>
+@{
+    ViewData["Title"] = "Налично оборудване";
+}
+
+<section class="content-section">
+    <section class="page-hero">
+        <h1><i class="bi bi-tools"></i> Налично оборудване</h1>
+        <p>Разгледайте наличното оборудване и подайте заявка за наем.</p>
+        <a asp-controller="RentalRequests" asp-action="Create" class="btn btn-primary btn-lg">
+            <i class="bi bi-plus-circle"></i> Нова заявка за наем
+        </a>
+    </section>
+
+    <section class="equipment-grid mt-4">
+        @if (!Model.Any())
+        {
+            <p class="text-muted">Все още няма добавено оборудване.</p>
+        }
+        else
+        {
+            <div class="cards-grid">
+                @foreach (var item in Model)
+                {
+                    <article class="equipment-card">
+                        @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                        {
+                            <img src="@item.ImageUrl" alt="@item.Name" class="equipment-img" />
+                        }
+                        else
+                        {
+                            <div class="equipment-img-placeholder"><i class="bi bi-tools"></i></div>
+                        }
+                        <div class="equipment-card-body">
+                            <h3 class="equipment-name">@item.Name</h3>
+                            @if (!string.IsNullOrWhiteSpace(item.Description))
+                            {
+                                <p class="equipment-desc">@item.Description</p>
+                            }
+                            <div class="equipment-meta">
+                                <span class="badge-condition badge-condition--@item.Condition.ToLower()">
+                                    @item.Condition
+                                </span>
+                                <span class="equipment-qty">
+                                    <i class="bi bi-box-seam"></i> @item.AvailableQuantity бр.
+                                </span>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+</section>

@@ -1,0 +1,87 @@
+@model EquipmentRental.Web.Models.CreateRentalRequestViewModel
+@{
+    ViewData["Title"] = "Нова заявка за наем";
+}
+
+<section class="content-section">
+    <section class="form-section">
+        <h1><i class="bi bi-file-earmark-plus"></i> Нова заявка за наем</h1>
+
+        <form asp-action="Create" method="post" class="rental-form">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="StartDate" class="form-label"></label>
+                    <input asp-for="StartDate" type="date" class="form-control" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="EndDate" class="form-label"></label>
+                    <input asp-for="EndDate" type="date" class="form-control" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Comment" class="form-label"></label>
+                <textarea asp-for="Comment" class="form-control" rows="3"
+                          placeholder="Опишете целта или коментар към заявката…"></textarea>
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <h4><i class="bi bi-tools"></i> Изберете оборудване</h4>
+                <p class="text-muted">Поставете отметка на артикулите, които искате да наемете, и задайте количество.</p>
+
+                @if (!Model.Items.Any())
+                {
+                    <p class="text-warning">Все още няма налично оборудване за избор.</p>
+                }
+                else
+                {
+                    <div class="equipment-selector">
+                        @for (int i = 0; i < Model.Items.Count; i++)
+                        {
+                            <div class="equipment-selector-row">
+                                <input type="hidden" asp-for="Items[i].EquipmentItemId" />
+                                <input type="hidden" asp-for="Items[i].EquipmentName" />
+
+                                <div class="selector-check">
+                                    <input class="form-check-input item-checkbox"
+                                           type="checkbox"
+                                           asp-for="Items[i].IsSelected"
+                                           id="item_@i" />
+                                </div>
+
+                                <label class="selector-label" for="item_@i">
+                                    @Model.Items[i].EquipmentName
+                                </label>
+
+                                <div class="selector-qty">
+                                    <label class="form-label small mb-0">Количество</label>
+                                    <input asp-for="Items[i].Quantity"
+                                           type="number" min="1" class="form-control qty-input"
+                                           style="width:90px;" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-send"></i> Подай заявка
+                </button>
+                <a asp-action="MyRequests" class="btn btn-secondary">
+                    <i class="bi bi-x"></i> Отказ
+                </a>
+            </div>
+        </form>
+    </section>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

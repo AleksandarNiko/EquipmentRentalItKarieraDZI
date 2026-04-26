@@ -1,0 +1,62 @@
+@model EquipmentRental.Web.Models.EquipmentFormViewModel
+@{
+    ViewData["Title"] = "Редактирай оборудване";
+}
+
+<section class="content-section">
+    <section class="form-section">
+        <h1><i class="bi bi-pencil-square"></i> Редактирай оборудване</h1>
+
+        <form asp-action="Edit" method="post" class="equipment-form">
+            <input asp-for="Id" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AvailableQuantity" class="form-label"></label>
+                <input asp-for="AvailableQuantity" type="number" class="form-control" min="0" />
+                <span asp-validation-for="AvailableQuantity" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="form-label"></label>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Condition" class="form-label"></label>
+                <select asp-for="Condition" class="form-select">
+                    <option value="New">Ново</option>
+                    <option value="Used">Използвано</option>
+                    <option value="NeedsRepair">За ремонт</option>
+                </select>
+                <span asp-validation-for="Condition" class="text-danger"></span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-warning">
+                    <i class="bi bi-check-lg"></i> Запази промените
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-x"></i> Отказ
+                </a>
+            </div>
+        </form>
+    </section>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

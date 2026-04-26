@@ -1,0 +1,91 @@
+@model IEnumerable<EquipmentRental.Data.Models.RentalRequest>
+@using EquipmentRental.Data.Models
+@{
+    ViewData["Title"] = "Управление на заявки";
+}
+
+<section class="content-section">
+    <section class="page-header">
+        <h1><i class="bi bi-list-check"></i> Всички заявки за наем</h1>
+    </section>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted mt-3">Все още няма подадени заявки.</p>
+    }
+    else
+    {
+        <table class="table table-striped table-hover mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Потребител</th>
+                    <th>Начална дата</th>
+                    <th>Крайна дата</th>
+                    <th>Артикули</th>
+                    <th>Коментар</th>
+                    <th>Статус</th>
+                    <th>Промени статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var req in Model)
+                {
+                    <tr>
+                        <td>@req.Id</td>
+                        <td>@req.UserName</td>
+                        <td>@req.StartDate.ToString("dd.MM.yyyy")</td>
+                        <td>@req.EndDate.ToString("dd.MM.yyyy")</td>
+                        <td>
+                            <ul class="item-list">
+                                @foreach (var ri in req.RentalRequestItems)
+                                {
+                                    <li>@ri.EquipmentItem?.Name — @ri.Quantity бр.</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>@req.Comment</td>
+                        <td>
+                            <span class="status-badge status-@req.Status.ToLower()">
+                                @(req.Status == RentalStatus.Pending  ? "В изчакване" :
+                                  req.Status == RentalStatus.Approved ? "Одобрена"    : "Отказана")
+                            </span>
+                        </td>
+                        <td>
+                            <form asp-action="UpdateStatus" method="post" class="status-form">
+                                <input type="hidden" name="id" value="@req.Id" />
+                                @Html.AntiForgeryToken()
+                                <select name="status" class="form-select form-select-sm d-inline w-auto">
+                                    <option value="@RentalStatus.Pending"
+                                            selected="@(req.Status == RentalStatus.Pending)">
+                                        В изчакване
+                                    </option>
+                                    <option value="@RentalStatus.Approved"
+                                            selected="@(req.Status == RentalStatus.Approved)">
+                                        Одобрена
+                                    </option>
+                                    <option value="@RentalStatus.Rejected"
+                                            selected="@(req.Status == RentalStatus.Rejected)">
+                                        Отказана
+                                    </option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary ms-1">
+                                    <i class="bi bi-check"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</section>

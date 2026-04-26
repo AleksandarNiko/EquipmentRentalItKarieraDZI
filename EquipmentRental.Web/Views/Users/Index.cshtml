@@ -1,0 +1,62 @@
+@model IEnumerable<EquipmentRental.Web.Models.UserListItemViewModel>
+@{
+    ViewData["Title"] = "Управление на потребители";
+}
+
+<section class="content-section">
+    <section class="page-header">
+        <h1><i class="bi bi-people"></i> Потребители</h1>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-person-plus"></i> Добави потребител
+        </a>
+    </section>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <table class="table table-striped table-hover mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Потребителско име</th>
+                <th>Имейл</th>
+                <th>Собствено име</th>
+                <th>Фамилия</th>
+                <th>Роля</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>
+                        <span class="role-badge role-@user.Role.ToLower()">@user.Role</span>
+                    </td>
+                    <td class="td-actions">
+                        <a asp-action="Edit" asp-route-id="@user.Id"
+                           class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil"></i> Редактирай
+                        </a>
+                        @if (user.Email != "admin@local")
+                        {
+                            <a asp-action="Delete" asp-route-id="@user.Id"
+                               class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i> Изтрий
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

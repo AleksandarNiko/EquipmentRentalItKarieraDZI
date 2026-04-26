@@ -1,0 +1,107 @@
+@model IEnumerable<EquipmentRental.Data.Models.EquipmentItem>
+@{
+    ViewData["Title"] = "Оборудване";
+}
+
+<section class="content-section">
+    <section class="page-header">
+        <h1><i class="bi bi-tools"></i> Оборудване</h1>
+
+        @* Search form for all authenticated users *@
+        <form method="get" asp-action="Index" class="search-form">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control"
+                       placeholder="Търсене по име…"
+                       value="@ViewBag.Search" />
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="bi bi-search"></i> Търси
+                </button>
+                @if (!string.IsNullOrWhiteSpace(ViewBag.Search as string))
+                {
+                    <a asp-action="Index" class="btn btn-outline-danger">
+                        <i class="bi bi-x"></i> Изчисти
+                    </a>
+                }
+            </div>
+        </form>
+
+        @if (User.IsInRole("Administrator"))
+        {
+            <a asp-action="Create" class="btn btn-success mt-2">
+                <i class="bi bi-plus-lg"></i> Добави оборудване
+            </a>
+        }
+    </section>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <section>
+        @if (!Model.Any())
+        {
+            <p class="text-muted mt-3">
+                @(string.IsNullOrWhiteSpace(ViewBag.Search as string)
+                    ? "Все още няма добавено оборудване."
+                    : "Не е намерено оборудване по зададеното търсене.")
+            </p>
+        }
+        else
+        {
+            <table class="table table-striped table-hover mt-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Снимка</th>
+                        <th>Име</th>
+                        <th>Описание</th>
+                        <th>Количество</th>
+                        <th>Състояние</th>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <th>Действия</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="td-img">
+                                @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                {
+                                    <img src="@item.ImageUrl" alt="@item.Name" class="table-thumb" />
+                                }
+                                else
+                                {
+                                    <span class="no-img"><i class="bi bi-tools"></i></span>
+                                }
+                            </td>
+                            <td><strong>@item.Name</strong></td>
+                            <td>@item.Description</td>
+                            <td>@item.AvailableQuantity бр.</td>
+                            <td>
+                                <span class="badge-condition badge-condition--@item.Condition.ToLower()">
+                                    @item.Condition
+                                </span>
+                            </td>
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <td class="td-actions">
+                                    <a asp-action="Edit" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i> Редактирай
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i> Изтрий
+                                    </a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
+</section>

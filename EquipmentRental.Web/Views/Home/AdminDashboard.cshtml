@@ -1,0 +1,60 @@
+@model EquipmentRental.Web.Models.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Административно табло";
+}
+
+<section class="content-section">
+    <section class="dashboard-header">
+        <h1><i class="bi bi-speedometer2"></i> Административно табло</h1>
+        <p class="text-muted">Обобщена информация за системата</p>
+    </section>
+
+    <section class="stats-grid">
+        <div class="stat-card stat-users">
+            <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-info">
+                <span class="stat-number">@Model.UserCount</span>
+                <span class="stat-label">Потребители</span>
+            </div>
+        </div>
+
+        <div class="stat-card stat-equipment">
+            <div class="stat-icon"><i class="bi bi-tools"></i></div>
+            <div class="stat-info">
+                <span class="stat-number">@Model.EquipmentCount</span>
+                <span class="stat-label">Артикула оборудване</span>
+            </div>
+        </div>
+
+        <div class="stat-card stat-requests">
+            <div class="stat-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
+            <div class="stat-info">
+                <span class="stat-number">@Model.RequestCount</span>
+                <span class="stat-label">Общо заявки</span>
+            </div>
+        </div>
+
+        <div class="stat-card stat-pending">
+            <div class="stat-icon"><i class="bi bi-hourglass-split"></i></div>
+            <div class="stat-info">
+                <span class="stat-number">@Model.PendingCount</span>
+                <span class="stat-label">В изчакване</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="quick-actions">
+        <h2>Бързи действия</h2>
+        <div class="action-buttons">
+            <a asp-controller="Equipment" asp-action="Index" class="btn btn-primary">
+                <i class="bi bi-tools"></i> Управление на оборудване
+            </a>
+            <a asp-controller="RentalRequests" asp-action="AdminIndex" class="btn btn-secondary">
+                <i class="bi bi-list-check"></i> Всички заявки
+            </a>
+            <a asp-controller="Users" asp-action="Index" class="btn btn-outline-primary">
+                <i class="bi bi-people"></i> Управление на потребители
+            </a>
+        </div>
+    </section>
+</section>
